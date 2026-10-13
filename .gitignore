@@ -1,0 +1,16 @@
+# 开发/测试产物
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# AstrBot 运行时数据与缓存（导入 AstrBot 源码时可能自动创建）
+data/
+plugin_data/
+*.db
+*.db-shm
+*.db-wal
+!lexicon.db
+!astrbot_plugin_campus_group_guardian/lexicon.db
+!tests/**/*.db
+backups/

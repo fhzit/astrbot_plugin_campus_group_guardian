@@ -1,0 +1,1 @@
+"""CampusGroupGuardian AstrBot plugin."""

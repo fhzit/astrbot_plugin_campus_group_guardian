@@ -1,0 +1,477 @@
+{
+  "general": {
+    "description": "基础设置",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "插件总开关",
+        "type": "bool",
+        "default": true
+      },
+      "group_white_list": {
+        "description": "群白名单（填了则只治理这些群；填群号即可）",
+        "type": "list",
+        "default": []
+      },
+      "group_black_list": {
+        "description": "群黑名单（不治理这些群）",
+        "type": "list",
+        "default": []
+      },
+      "plugin_admins": {
+        "description": "插件管理员 ID 列表（与群管理员权限相互独立）",
+        "type": "list",
+        "default": []
+      },
+      "trusted_sender_ids": {
+        "description": "可信发言者 ID（角色未知的平台可用，等同群管理员放行反诈）",
+        "type": "list",
+        "default": []
+      }
+    }
+  },
+  "platform": {
+    "description": "平台行为",
+    "type": "object",
+    "items": {
+      "role_cache_ttl_seconds": {
+        "description": "群角色缓存秒数（危险动作仍以平台返回为准）",
+        "type": "int",
+        "default": 60
+      },
+      "ignore_bot_self_message": {
+        "description": "忽略机器人自己发送的消息",
+        "type": "bool",
+        "default": true
+      },
+      "allow_astrbot_admin_manage": {
+        "description": "允许 AstrBot 管理员在群内使用管理指令",
+        "type": "bool",
+        "default": true
+      }
+    }
+  },
+  "permissions": {
+    "description": "权限",
+    "type": "object",
+    "items": {
+      "require_bot_admin_for_manage": {
+        "description": "执行管理动作前要求机器人具备相应平台权限（否则返回不支持）",
+        "type": "bool",
+        "default": true
+      },
+      "trusted_operators_enabled": {
+        "description": "启用可信操作者（WebUI 维护，可在角色未知的平台授权）",
+        "type": "bool",
+        "default": true
+      }
+    }
+  },
+  "moderation": {
+    "description": "内容审核",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用内容审核",
+        "type": "bool",
+        "default": true
+      },
+      "lexicon_path": {
+        "description": "词库 SQLite 路径（留空则自动使用原版插件的 lexicon.db）",
+        "type": "string",
+        "default": ""
+      },
+      "enabled_categories": {
+        "description": "启用类别",
+        "type": "list",
+        "default": [
+          "advertisement",
+          "url",
+          "abuse",
+          "porn",
+          "violence",
+          "weapon",
+          "political",
+          "privacy",
+          "fraud",
+          "other"
+        ]
+      },
+      "admin_exempt": {
+        "description": "群主/管理员免内容审核（与反诈模块的角色放行是两件事）",
+        "type": "bool",
+        "default": false
+      },
+      "llm_verify": {
+        "description": "启用 AI 二次判断（仅疑似时）",
+        "type": "bool",
+        "default": false
+      },
+      "llm_always": {
+        "description": "全量 AI 审核（默认关闭）",
+        "type": "bool",
+        "default": false
+      },
+      "llm_provider_id": {
+        "description": "审核用 LLM Provider ID（留空使用当前会话 Provider）",
+        "type": "string",
+        "default": ""
+      },
+      "context_messages": {
+        "description": "上下文审核条数",
+        "type": "int",
+        "default": 30
+      },
+      "recall_on_violation": {
+        "description": "违规时撤回消息",
+        "type": "bool",
+        "default": true
+      },
+      "warn_on_violation": {
+        "description": "违规时群内提示",
+        "type": "bool",
+        "default": true
+      },
+      "mute_seconds": {
+        "description": "违规禁言秒数（0 表示不禁言）",
+        "type": "int",
+        "default": 0
+      }
+    }
+  },
+  "anti_flood": {
+    "description": "刷屏监控",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用刷屏监控",
+        "type": "bool",
+        "default": true
+      },
+      "per_second": {
+        "description": "每秒消息上限",
+        "type": "int",
+        "default": 5
+      },
+      "per_minute": {
+        "description": "每分钟消息上限",
+        "type": "int",
+        "default": 20
+      },
+      "per_hour": {
+        "description": "每小时消息上限",
+        "type": "int",
+        "default": 120
+      },
+      "night_per_minute": {
+        "description": "夜间每分钟上限",
+        "type": "int",
+        "default": 10
+      },
+      "repeat_threshold": {
+        "description": "重复消息判定次数",
+        "type": "int",
+        "default": 4
+      },
+      "long_text_threshold": {
+        "description": "长文本字数阈值",
+        "type": "int",
+        "default": 800
+      },
+      "admin_exempt": {
+        "description": "管理员免刷屏检测",
+        "type": "bool",
+        "default": true
+      },
+      "mute_seconds": {
+        "description": "刷屏禁言秒数",
+        "type": "int",
+        "default": 300
+      }
+    }
+  },
+  "anti_fraud": {
+    "description": "家校群虚假缴费反诈",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用家校反诈模块",
+        "type": "bool",
+        "default": true
+      },
+      "risk_threshold_suspicious": {
+        "description": "SUSPICIOUS 阈值",
+        "type": "float",
+        "default": 30.0
+      },
+      "risk_threshold_high": {
+        "description": "HIGH 阈值",
+        "type": "float",
+        "default": 60.0
+      },
+      "risk_threshold_critical": {
+        "description": "CRITICAL 阈值",
+        "type": "float",
+        "default": 85.0
+      },
+      "context_messages": {
+        "description": "同一成员上下文条数（5-20）",
+        "type": "int",
+        "default": 10
+      },
+      "context_seconds": {
+        "description": "上下文时间窗（秒）",
+        "type": "int",
+        "default": 300
+      },
+      "teacher_names": {
+        "description": "教师姓名列表（用于识别冒充）",
+        "type": "list",
+        "default": []
+      },
+      "trusted_sender_ids": {
+        "description": "反诈放行的可信发送者 ID",
+        "type": "list",
+        "default": []
+      },
+      "auto_recall_high": {
+        "description": "HIGH 自动撤回",
+        "type": "bool",
+        "default": false
+      },
+      "auto_recall_critical": {
+        "description": "CRITICAL 自动撤回",
+        "type": "bool",
+        "default": true
+      },
+      "auto_mute_critical": {
+        "description": "CRITICAL 自动临时禁言",
+        "type": "bool",
+        "default": true
+      },
+      "critical_mute_seconds": {
+        "description": "CRITICAL 禁言秒数（超平台上限时按平台限制处理）",
+        "type": "int",
+        "default": 600
+      },
+      "auto_kick_critical": {
+        "description": "CRITICAL 自动踢出（默认关闭）",
+        "type": "bool",
+        "default": false
+      },
+      "auto_blacklist_critical": {
+        "description": "CRITICAL 自动加入黑名单（默认关闭，需平台支持）",
+        "type": "bool",
+        "default": false
+      },
+      "group_warning_enabled": {
+        "description": "群内反诈预警提示",
+        "type": "bool",
+        "default": true
+      },
+      "stop_event_on_critical": {
+        "description": "CRITICAL 时阻断后续处理",
+        "type": "bool",
+        "default": true
+      }
+    }
+  },
+  "ocr": {
+    "description": "OCR",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用 OCR",
+        "type": "bool",
+        "default": true
+      },
+      "strategy": {
+        "description": "OCR 调用策略",
+        "type": "string",
+        "default": "uapi_then_ai",
+        "options": [
+          "uapi_only",
+          "ai_only",
+          "uapi_then_ai",
+          "ai_then_uapi"
+        ]
+      },
+      "uapi_api_key": {
+        "description": "UApiPro API Key（Secret，不会写入日志）",
+        "type": "string",
+        "default": "",
+        "secret": true
+      },
+      "uapi_endpoint": {
+        "description": "UApiPro 通用 OCR 端点",
+        "type": "string",
+        "default": "https://uapis.cn/api/v1/image/ocr"
+      },
+      "timeout": {
+        "description": "单次请求超时（秒）",
+        "type": "float",
+        "default": 15.0
+      },
+      "max_retries": {
+        "description": "超时/网络错误重试次数",
+        "type": "int",
+        "default": 2
+      },
+      "max_concurrency": {
+        "description": "OCR 并发上限",
+        "type": "int",
+        "default": 2
+      },
+      "enable_cls": {
+        "description": "OCR 后处理模型（可选）",
+        "type": "bool",
+        "default": false
+      },
+      "strict_image_scan": {
+        "description": "严格模式：普通成员发图即 OCR",
+        "type": "bool",
+        "default": false
+      },
+      "cache_ttl_seconds": {
+        "description": "同图 OCR 结果缓存秒数",
+        "type": "int",
+        "default": 600
+      }
+    }
+  },
+  "ai": {
+    "description": "AI 审核（只选 Provider，不维护第二套 Key）",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用 AI 审核",
+        "type": "bool",
+        "default": false
+      },
+      "moderation_provider_id": {
+        "description": "内容审核 Provider ID",
+        "type": "string",
+        "default": ""
+      },
+      "vision_provider_id": {
+        "description": "视觉 Provider ID（OCR 兜底）",
+        "type": "string",
+        "default": ""
+      },
+      "fraud_provider_id": {
+        "description": "反诈复核 Provider ID",
+        "type": "string",
+        "default": ""
+      },
+      "timeout": {
+        "description": "AI 调用超时（秒）",
+        "type": "float",
+        "default": 20.0
+      },
+      "max_concurrency": {
+        "description": "AI 并发上限",
+        "type": "int",
+        "default": 2
+      },
+      "only_when_uncertain": {
+        "description": "仅在本地规则不确定时调用 AI",
+        "type": "bool",
+        "default": true
+      }
+    }
+  },
+  "actions": {
+    "description": "处置动作",
+    "type": "object",
+    "items": {
+      "group_warning_text": {
+        "description": "群内反诈预警文案（留空使用默认文案）",
+        "type": "string",
+        "default": ""
+      },
+      "notify_admins": {
+        "description": "高风险事件通知管理员（站内 + 会话内 @）",
+        "type": "bool",
+        "default": true
+      },
+      "record_incident_from_suspicious": {
+        "description": "SUSPICIOUS 也记录事件",
+        "type": "bool",
+        "default": true
+      }
+    }
+  },
+  "storage": {
+    "description": "存储与保留",
+    "type": "object",
+    "items": {
+      "violation_retention_days": {
+        "description": "违规记录保留天数",
+        "type": "int",
+        "default": 90
+      },
+      "incident_retention_days": {
+        "description": "反诈事件保留天数",
+        "type": "int",
+        "default": 180
+      },
+      "action_log_retention_days": {
+        "description": "动作日志保留天数",
+        "type": "int",
+        "default": 30
+      },
+      "cleanup_interval_hours": {
+        "description": "清理任务间隔（小时）",
+        "type": "int",
+        "default": 12
+      },
+      "store_payment_image": {
+        "description": "保存付款图片证据（默认关闭，只留文本摘要）",
+        "type": "bool",
+        "default": false
+      }
+    }
+  },
+  "webui": {
+    "description": "插件页面",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "启用插件页面",
+        "type": "bool",
+        "default": true
+      },
+      "page_title": {
+        "description": "页面标题",
+        "type": "string",
+        "default": "校园群聊卫士"
+      }
+    }
+  },
+  "advanced": {
+    "description": "高级",
+    "type": "object",
+    "items": {
+      "scheduler_enabled": {
+        "description": "启用定时任务（定时解禁/清理）",
+        "type": "bool",
+        "default": true
+      },
+      "legacy_plugin_data_dir": {
+        "description": "原版 GroupGuardian 数据目录（留空自动探测）",
+        "type": "string",
+        "default": ""
+      },
+      "debug_log_platform_error": {
+        "description": "调试日志记录平台原始错误",
+        "type": "bool",
+        "default": true
+      },
+      "matcher_use_pyahocorasick": {
+        "description": "使用 pyahocorasick 加速（需自行安装，未安装自动回退）",
+        "type": "bool",
+        "default": false
+      }
+    }
+  }
+}

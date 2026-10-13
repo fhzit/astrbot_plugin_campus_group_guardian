@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>校园群聊卫士</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-theme="light">
+    <header class="gg-header">
+      <div>
+        <h1>校园群聊卫士</h1>
+        <p class="gg-sub">跨平台群聊治理 · 家校群虚假缴费反诈</p>
+      </div>
+      <div class="gg-header-actions">
+        <span id="gg-locale" class="gg-chip"></span>
+        <button id="gg-refresh" class="gg-btn">刷新</button>
+      </div>
+    </header>
+
+    <nav class="gg-tabs" id="gg-tabs">
+      <button class="gg-tab is-active" data-tab="overview">总览</button>
+      <button class="gg-tab" data-tab="antifraud">家校反诈</button>
+      <button class="gg-tab" data-tab="capabilities">平台能力</button>
+      <button class="gg-tab" data-tab="tester">测试器</button>
+      <button class="gg-tab" data-tab="diagnostics">诊断</button>
+      <button class="gg-tab" data-tab="logs">动作日志</button>
+    </nav>
+
+    <main class="gg-main">
+      <section class="gg-panel" data-panel="overview">
+        <h2>统计概览</h2>
+        <div class="gg-cards" id="gg-stats"></div>
+        <h3>近 7 天风险事件</h3>
+        <div id="gg-trend" class="gg-trend"></div>
+      </section>
+
+      <section class="gg-panel is-hidden" data-panel="antifraud">
+        <h2>反诈事件</h2>
+        <div class="gg-toolbar">
+          <label>状态
+            <select id="gg-incident-status">
+              <option value="">全部</option>
+              <option value="open">OPEN</option>
+              <option value="confirmed_fraud">已确认诈骗</option>
+              <option value="false_positive">误判</option>
+              <option value="resolved">已处理</option>
+            </select>
+          </label>
+          <button id="gg-incident-reload" class="gg-btn">加载</button>
+        </div>
+        <div id="gg-incidents" class="gg-list"></div>
+      </section>
+
+      <section class="gg-panel is-hidden" data-panel="capabilities">
+        <h2>平台能力矩阵</h2>
+        <p class="gg-hint">能力由适配层声明，未支持的操作会降级为「记录 + 告警」，不会使整条处置失败。</p>
+        <div id="gg-capabilities" class="gg-list"></div>
+      </section>
+
+      <section class="gg-panel is-hidden" data-panel="tester">
+        <h2>反诈测试器</h2>
+        <p class="gg-hint">只运行检测器，绝不执行撤回 / 禁言 / 踢人 / 拉黑。</p>
+        <div class="gg-form">
+          <label>消息文本
+            <textarea id="gg-test-text" rows="4" placeholder="学校统一购买学习资料，每位495元，请扫码付款，备注学生姓名"></textarea>
+          </label>
+          <div class="gg-form-row">
+            <label>发送者角色
+              <select id="gg-test-role">
+                <option value="member">普通成员</option>
+                <option value="admin">群管理员</option>
+                <option value="owner">群主</option>
+                <option value="unknown">未知</option>
+              </select>
+            </label>
+            <label>发送者昵称
+              <input id="gg-test-name" type="text" placeholder="班主任张老师" />
+            </label>
+            <label>群 GroupKey
+              <input id="gg-test-group" type="text" placeholder="qq_official:inst-1:10001（留空用全局配置）" />
+            </label>
+          </div>
+          <button id="gg-test-run" class="gg-btn gg-btn-primary">运行检测</button>
+        </div>
+        <div id="gg-test-result" class="gg-result"></div>
+      </section>
+
+      <section class="gg-panel is-hidden" data-panel="diagnostics">
+        <h2>运行诊断</h2>
+        <div id="gg-diagnostics" class="gg-list"></div>
+        <div class="gg-toolbar">
+          <button id="gg-migrate-check" class="gg-btn">检测旧版数据</button>
+          <button id="gg-migrate-run" class="gg-btn">备份并迁移</button>
+        </div>
+        <div id="gg-migrate-result" class="gg-result"></div>
+      </section>
+
+      <section class="gg-panel is-hidden" data-panel="logs">
+        <h2>最近动作日志</h2>
+        <div class="gg-toolbar">
+          <label>条数 <input id="gg-log-limit" type="number" value="100" min="10" max="500" /></label>
+          <button id="gg-log-reload" class="gg-btn">加载</button>
+        </div>
+        <div id="gg-logs"></div>
+      </section>
+    </main>
+
+    <div id="gg-toast" class="gg-toast is-hidden"></div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

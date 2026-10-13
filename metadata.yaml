@@ -1,0 +1,25 @@
+name: astrbot_plugin_campus_group_guardian
+display_name: 校园群聊卫士
+short_desc: 跨平台群聊治理框架：家校群虚假缴费反诈 + 统一多平台适配层（OneBot / QQ 官方机器人 / 企业微信 / 钉钉）
+desc: "基于 QQ群智能守护者（astrbot_plugin_group_guardian，MIT）重构的跨平台群聊治理插件。核心是统一平台能力层（Capability / Limits / RecallPolicy）与家校群虚假缴费反诈模块 School Fraud Guard：普通成员冒充老师发布收费通知、引导扫码付款、索要学生姓名与付款截图的组合行为会被联合判定并处置。反诈检测与平台无关，管理动作按平台能力自动降级（Recall/Mute/Kick 不支持时标记 UNSUPPORTED 而不会整单失败）。支持 UApiPro OCR 与 AstrBot 视觉模型两级识别、AI 结构化复核、违规事件留痕与人工复核、插件 WebUI（Dashboard Plugin Page）。群主与群管理员发布的缴费信息不进入反诈判定。"
+version: v0.1.0
+author: fhzit
+astrbot_version: ">=4.24.2"
+support_platforms:
+  - aiocqhttp
+  - qq_official
+  - qq_official_webhook
+  - wecom
+  - wecom_ai_bot
+  - dingtalk
+repo: https://github.com/fhzit/astrbot_plugin_campus_group_guardian
+license: MIT
+tags:
+  - 反诈骗
+  - 群管理
+  - 内容审核
+  - 多平台
+  - WebUI
+pages:
+  - name: guardian
+    title: 反诈中心
